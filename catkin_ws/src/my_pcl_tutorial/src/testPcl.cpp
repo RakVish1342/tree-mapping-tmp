@@ -77,20 +77,22 @@ main (int argc, char** argv)
 
     int ctr = 0;
     int tmp;
+    int maxPoints = 1000000;
+    int printScale = 100;
     std::ifstream fileIn(path);
     while(fileIn >> x >> y >> z)
     {
-        if(ctr >= 3)
+        if(ctr >= 100000)
         {
             break;
         }
 
-        // if(ctr % 10 == 0)
-        // {
+        if(ctr % maxPoints/printScale == 0)
+        {
             cout << "ctr: " << ctr << endl;
-        // }
+        }
 
-        cout << "xyz: " << x << ", " << y << ",  " << z << endl;
+        // cout << "xyz: " << x << ", " << y << ",  " << z << endl;
         point.x = x;
         point.y = y;
         point.z = z;
@@ -102,16 +104,13 @@ main (int argc, char** argv)
     sensor_msgs::PointCloud2 cloudRos;
     pcl::toROSMsg(*(cloudPcl), cloudRos);
 
+    cloudRos.header.frame_id = "map";
     pub.publish(cloudRos);
 
 
+    // tmp just to prevent node from dying
     while(1)
     {}
-
-    // boost::shared_ptr viewer (new pcl::visualization::PCLVisualizer ("3D    Viewer"));
-    // viewer->setBackgroundColor (0, 0, 0);
-    // viewer->addCoordinateSystem (1.0);
-    // viewer->initCameraParameters ();
 
     cout << "Done" << endl;
     return 0;
