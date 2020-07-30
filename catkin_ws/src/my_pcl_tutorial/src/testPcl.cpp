@@ -11,57 +11,15 @@
 #include <pcl/segmentation/sac_segmentation.h>
 
 #include <fstream>
-// #include <boost>
 
 using namespace std;
 
-ros::Publisher pub;
-
-void 
-cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
-{
-    // Convert the sensor_msgs/PointCloud2 data to pcl/PointCloud
-    pcl::PointCloud<pcl::PointXYZ> cloud;
-    pcl::fromROSMsg (*input, cloud);
-
-    pcl::ModelCoefficients coefficients;
-    pcl::PointIndices inliers;
-    // Create the segmentation object
-    pcl::SACSegmentation<pcl::PointXYZ> seg;
-    // Optional
-    seg.setOptimizeCoefficients (true);
-    // Mandatory
-    seg.setModelType (pcl::SACMODEL_PLANE);
-    seg.setMethodType (pcl::SAC_RANSAC);
-    seg.setDistanceThreshold (0.01);
-
-    seg.setInputCloud (cloud.makeShared ());
-    seg.segment (inliers, coefficients); 
-    
-    // Publish the model coefficients
-    pcl_msgs::ModelCoefficients ros_coefficients;
-    pcl_conversions::fromPCL(coefficients, ros_coefficients);
-    pub.publish (ros_coefficients);
-}
 
 main (int argc, char** argv)
 {
-    // Initialize ROS
     ros::init (argc, argv, "my_pcl_tutorial");
-
     ros::NodeHandle nh;
-
-    // Create a ROS subscriber for the input point cloud
-    ros::Subscriber sub = nh.subscribe ("/pcl/sub", 10, cloud_cb);
-
-    // Create a ROS publisher for the output model coefficients
-    // pub = nh.advertise<pcl_msgs::ModelCoefficients> ("output", 1);
-    pub = nh.advertise< sensor_msgs::PointCloud2 > ("pcl/pub", 10, true);
-
-    /*    
-    // Spin
-    ros::spin ();
-    */
+    ros::Publisher pub = nh.advertise< sensor_msgs::PointCloud2 > ("pcl/pub", 10, true);
 
     std::string path = "/home/rxth/rakshith/data/work/asu/dreams/treeMapping/dataset/4_LidarTreePoinCloudData/";
     std::string fileName = "GUY01_000.txt";
@@ -77,17 +35,16 @@ main (int argc, char** argv)
 
     int ctr = 0;
     int tmp;
-    int maxPoints = 1000000;
-    int printScale = 100;
+    int maxPoints = 2000000; // Load upto 2 million points
     std::ifstream fileIn(path);
     while(fileIn >> x >> y >> z)
     {
-        if(ctr >= 100000)
+        if(ctr >= maxPoints)
         {
             break;
         }
 
-        if(ctr % maxPoints/printScale == 0)
+        if( (ctr % (maxPoints/1000) ) == 0)
         {
             cout << "ctr: " << ctr << endl;
         }
@@ -104,14 +61,14 @@ main (int argc, char** argv)
     sensor_msgs::PointCloud2 cloudRos;
     pcl::toROSMsg(*(cloudPcl), cloudRos);
 
-    cloudRos.header.frame_id = "map";
+    cloudRos.header.frame_id = "origin_tree";
     pub.publish(cloudRos);
 
+    while(ros::ok())
+    {
+        // just stay alive so that topics are alive
+        ros::Duration(1).sleep();
+    }
 
-    // tmp just to prevent node from dying
-    while(1)
-    {}
-
-    cout << "Done" << endl;
     return 0;
 }
