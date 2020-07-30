@@ -1,0 +1,11 @@
+Creating a pcl package to view trees:
+* mkdir -p ~/catkin_ws/src
+* cd ~/catkin_ws/
+* catkin_init_workspace
+
+* cd ~/catkin/src/
+* catkin_create_pkg my_pcl_tutorial pcl_conversions pcl_ros roscpp sensor_msgs
+* modify package.xml as per: http://wiki.ros.org/pcl/Tutorials
+* Create source file
+* Add source file to package CMakeLists.txt
+* catkin build (NOT catkin_make since catkin_init_workspace was used?? But not sure)
