@@ -9,3 +9,8 @@ Creating a pcl package to view trees:
 * Create source file
 * Add source file to package CMakeLists.txt
 * catkin build (NOT catkin_make since catkin_init_workspace was used?? But not sure)
+
+* Set the required gazebo plugin/resources/models path as environment variable
+* Currently velodyne is not being simulated in ROS melodic. Seeting LD_LIBRARY_PATH, GAZEBO_PLUGIN_PATH, GAZEBO_RESOURCE_PATH, etc. to point to .so file still leads to the error:
+gzserver: symbol lookup error: /home/rxth/rakshith/data/work/asu/dreams/treeMapping/catkin_ws/devel/lib/libgazebo_ros_velodyne_laser.so: undefined symbol: _ZN2tf7resolveERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_
+* But it runs fine on Gazebo 7 (ie ros kinetic)
