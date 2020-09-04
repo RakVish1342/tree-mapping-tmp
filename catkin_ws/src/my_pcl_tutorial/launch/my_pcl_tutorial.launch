@@ -1,9 +1,0 @@
-<launch>
-
-  <node name="my_pcl_tutorial"  pkg="my_pcl_tutorial" type="testPcl" output="screen"/>
-
-  <node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="1 0 0 0 0 0 1 origin_tree child_frame1" />
-
-  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find my_pcl_tutorial)/rviz/pointcloud.rviz" />
-
-</launch>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(my_pcl_tutorial)
+project(tree_pointcloud_viz)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -71,7 +71,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   sensor_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -105,8 +105,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES my_pcl_tutorial
-#  CATKIN_DEPENDS pcl_conversions pcl_ros roscpp sensor_msgs
+#  LIBRARIES tree_pointcloud_viz
+#  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
 
@@ -123,7 +123,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/my_pcl_tutorial.cpp
+#   src/${PROJECT_NAME}/tree_pointcloud_viz.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -134,7 +134,8 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/my_pcl_tutorial_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/tree_pointcloud_viz_node.cpp)
+add_executable(testPcl src/testPcl.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +151,8 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(testPcl ${catkin_LIBRARIES})
+
 
 #############
 ## Install ##
@@ -198,7 +201,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_my_pcl_tutorial.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_tree_pointcloud_viz.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

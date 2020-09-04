@@ -1,0 +1,12 @@
+<launch>
+
+  <arg name="pkg_name" value="tree_pointcloud_viz" />
+  <arg name="pkg_path" value="$(find tree_pointcloud_viz)" />
+
+  <node name="$(arg pkg_name)"  pkg="$(arg pkg_name)" type="testPcl" output="screen"/>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="1 0 0 0 0 0 1 origin_tree child_frame1" />
+
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(arg pkg_path)/rviz/pointcloud.rviz" />
+
+</launch>
